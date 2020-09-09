@@ -8,6 +8,8 @@ from django.contrib import messages
 from .models import Comment
 from .forms import CommentForm
 
+def home(request):
+    return render(request, 'index.html')
 
 def comments(request):
     comments_list = Comment.objects.order_by('-created_at')
@@ -33,7 +35,7 @@ def comments(request):
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
-            return redirect('comments')
+            return redirect('')
     else:
         form = CommentForm()
 
