@@ -8,8 +8,23 @@ from django.contrib import messages
 from .models import Comment
 from .forms import CommentForm
 
+def home(request):
+    return render(request, 'index.html')
 
 def comments(request):
+    comments_list = Comment.objects.order_by('-created_at')
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = CommentForm()
+
+    return render(request, 'RecaptchaForm.html', {'comments': comments_list, 'form': form})
+
+
+'''def comments(request):
     comments_list = Comment.objects.order_by('-created_at')
 
     if request.method == 'POST':
@@ -33,8 +48,8 @@ def comments(request):
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
-            return redirect('comments')
+            return redirect('/')
     else:
         form = CommentForm()
 
-    return render(request, 'RecaptchaForm.html', {'comments': comments_list, 'form': form})
+    return render(request, 'RecaptchaForm.html', {'comments': comments_list, 'form': form})'''
